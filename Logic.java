@@ -7,23 +7,140 @@
     public class Logic
     {
         public static void getMove(int rowMove, int colMove, int move, Font font, JButton square[][], 
-        String startingPlayer)
+        String startingPlayer, boolean ai)
         {   // gets the current move "X" or "O" for the user & displays to screen
             square[rowMove][colMove].setFont(font);
             //TODO: create logic to set which player made the move
+            
             String player2;
-            String currentPlayer = startingPlayer;
             if (startingPlayer.equals("O")){
-                player2 = "X";
+                    player2 = "X";
+                }else{
+                    player2 = "O";
+                }
+                
+            if (ai == false){ 
+                String currentPlayer = startingPlayer;
+                if (move % 2 != 0) {
+                    currentPlayer = player2;
+                }
+                square[rowMove][colMove].setText(currentPlayer);
             }else{
-                player2 = "O";
+                square[rowMove][colMove].setText(startingPlayer);
+                if(move < square.length * square.length - 1) {
+                    int size = square.length;
+                    int row = (int)(Math.random() * size);
+                    int col = (int)(Math.random() * size);
+                    square[row][col].setText(player2);
+                }
             }
-            if (move % 2 != 0) {
-                currentPlayer = player2;
-            }
-            square[rowMove][colMove].setText(currentPlayer);
         }
         
+        
+        
+        public boolean checkAvailable(int row, int col, JButton square[][]) {
+            if (!square[row][col].getText().equals("X") && !square[row][col].getText().equals("O")) {
+                return true;
+            }
+            return false;
+        }
+        
+        public int checkPosWinRow(String OX, JButton square[][], int size) { //fix: returns when it's not supposed to
+            for (int row = 0; row < size; row++) {
+                int count = 0;
+                for (int col = 0; col < square[0].length; col++) {
+                   if (square[row][col] != null && square[row][col].equals(OX)) {
+                       count++;
+                   }
+                }
+                if (count == size - 1) {
+                    return row;
+                }
+            }
+            return -1;
+        }
+        
+        public int checkColOfRow(int row, JButton square[][]) {
+             for (int col = 0; col < square[0].length; col++) {
+                 if (square[row][col] == null) {
+                     return col;
+                 }
+             }
+             return -1; 
+        }
+        
+        public int checkPosWinCol(String OX, JButton square[][], int size) {
+            for (int col = 0; col < square[0].length; col++) {
+                int count = 0;
+                for (int row = 0; row < size; row++) {
+                   if (square[row][col] != null && square[row][col].equals(OX)) {
+                       count++;
+                   }
+                }
+                if (count == size - 1) {
+                    return col;
+                }
+            }
+            return -1;
+        }
+        
+        public int checkRowOfCol(int col, JButton square[][]) {
+            for (int row = 0; row < square[0].length; row++) {
+                 if (square[row][col] == null) {
+                     return row;
+                 }
+             }
+             return -1; 
+        }
+        
+        public boolean checkPosWinDiag1(String OX, JButton square[][], int size) {
+            int count = 0;
+            for (int row = 0; row < size; row++) {
+               if (square[row][row] != null && square[row][row].equals(OX)) {
+                    count++;
+               }
+               if (count == size - 1) {
+                    return true;
+               }
+            }
+            return false;
+        }
+        
+        public int getPosWinDiag1(JButton square[][], int size) {
+            for (int row = 0; row < size; row++) {
+                if (square[row][row] == null) {
+                    return row;
+                }
+            }
+            return -1;
+        }
+        
+        public boolean checkPosWinDiag2(String OX, JButton square[][], int size) {
+            int count = 0;
+            for (int row = 0; row < size; row++) {
+                if (square[row][size - 1 - row] != null && square[row][size - 1 - row].equals(OX)) {
+                    count++;
+                }
+                if (count == size) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public int getPosWinDiag2(JButton square[][], int size) {
+            for (int row = 0; row < size; row++) {
+                if (square[row][size - 1 - row] == null) {
+                    return row;
+                }
+            }
+            return -1;
+        }
+            
+            
+            
+            
+            
         
         
         public static boolean checkRows(JButton square[][], String OX, int size) {
@@ -96,7 +213,7 @@
             }
             return true;
        }
-    
+        
 
         public static void showGame(JPanel pnlSouth, JPanel pnlPlayingField)
         {   // shows the Playing Field

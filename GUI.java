@@ -41,6 +41,7 @@ public class GUI extends JFrame implements ActionListener
     private Font font = new Font("Rufscript", Font.BOLD, 100);
     private int movesMade = 0;
     private int maxMoves;
+    private boolean ai = false;
 
     //===============================  GUI  ========================================//
     public GUI() //This is the constructor
@@ -143,7 +144,7 @@ public class GUI extends JFrame implements ActionListener
                     {
                         squareClicked = true;
                         Logic.getMove(rowMove, colMove, movesMade, font, 
-                            square, startingPlayer);          
+                            square, startingPlayer, ai);          
                         panelPlayingField.requestFocus();
                         movesMade++;
                     }
@@ -164,13 +165,24 @@ public class GUI extends JFrame implements ActionListener
                 }
             }else if(Logic.checkWin(square, player2, size)){
                 inGame = false;
-                int option = JOptionPane.showConfirmDialog(null, "Player 2 won. Cool, very cool. Do you want to play again?", 
-                    "Game Won" ,JOptionPane.YES_NO_OPTION);
-                if(option == JOptionPane.NO_OPTION)
-                {
-                    System.exit(0);
-                }else {
-                    redrawGameBoard();
+                if(ai == false) {
+                    int option = JOptionPane.showConfirmDialog(null, "Player 2 won. Cool, very cool. Do you want to play again?", 
+                        "Game Won" ,JOptionPane.YES_NO_OPTION);
+                    if(option == JOptionPane.NO_OPTION)
+                    {
+                        System.exit(0);
+                    }else {
+                        redrawGameBoard();
+                    }
+                }else{
+                    int option = JOptionPane.showConfirmDialog(null, "Oof, you lost. Do you want to play again?", 
+                        "Game Lost" ,JOptionPane.YES_NO_OPTION);
+                    if(option == JOptionPane.NO_OPTION)
+                    {
+                        System.exit(0);
+                    }else {
+                        redrawGameBoard();
+                    }
                 }
             }else if(Logic.checkFilled(square, size)){
                 inGame = false;
@@ -288,6 +300,12 @@ public class GUI extends JFrame implements ActionListener
                         "3");
                 size = Integer.parseInt(input);
                 setLay();
+                int option = JOptionPane.showConfirmDialog(null, "Are you playing solo?", 
+                    "" ,JOptionPane.YES_NO_OPTION);
+                if(option == JOptionPane.YES_OPTION)
+                {
+                    ai = true;
+                }
             }
             
             panelSouth.setVisible(false); 
