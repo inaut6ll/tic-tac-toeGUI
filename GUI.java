@@ -8,7 +8,7 @@ import javax.swing.*;
 public class GUI extends JFrame implements ActionListener
 {
     // setting up ALL the variables
-    private int size = 5;
+    private int size = -1;
     JFrame window = new JFrame("Tic Tac Toe");
 
     JMenuBar menuMain = new JMenuBar();
@@ -17,7 +17,7 @@ public class GUI extends JFrame implements ActionListener
     menuStartingPlayer = new JMenuItem("Starting Player"),
     menuExit = new JMenuItem("      Quit");
 
-    JButton [][] square = new JButton[size][size];
+    JButton [][] square;
 
     JPanel panelNewGame = new JPanel(),
         panelNorth = new JPanel(),
@@ -40,7 +40,7 @@ public class GUI extends JFrame implements ActionListener
     private String message;
     private Font font = new Font("Rufscript", Font.BOLD, 100);
     private int movesMade = 0;
-    private int maxMoves = square.length * square[0].length;
+    private int maxMoves;
 
     //===============================  GUI  ========================================//
     public GUI() //This is the constructor
@@ -109,6 +109,9 @@ public class GUI extends JFrame implements ActionListener
     
     // setting up the playing field
     public void setLay(){
+        square = new JButton[size][size];
+        maxMoves = square.length * square[0].length;
+        
         panelPlayingField.setLayout(new GridLayout(size, size, 2, 2));
         panelPlayingField.setBackground(Color.black);
         for(int r = 0; r < square.length; r++)   
@@ -130,21 +133,22 @@ public class GUI extends JFrame implements ActionListener
         Object source = click.getSource();
 
         // check if a button was clicked on the gameboard
-        for(int rowMove=0; rowMove < square.length; rowMove++) 
-            for(int colMove = 0; colMove < square[0].length; colMove++)
-            {
-                if(source == square[rowMove][colMove] && movesMade < maxMoves 
-                    && !square[rowMove][colMove].getText().equals("O")
-                    && !square[rowMove][colMove].getText().equals("X"))  
+        if (square != null) {
+            for(int rowMove=0; rowMove < square.length; rowMove++) 
+                for(int colMove = 0; colMove < square[0].length; colMove++)
                 {
-                    squareClicked = true;
-                    Logic.getMove(rowMove, colMove, movesMade, font, 
-                        square, startingPlayer);          
-                    panelPlayingField.requestFocus();
-                    movesMade++;
+                    if(source == square[rowMove][colMove] && movesMade < maxMoves 
+                        && !square[rowMove][colMove].getText().equals("O")
+                        && !square[rowMove][colMove].getText().equals("X"))  
+                    {
+                        squareClicked = true;
+                        Logic.getMove(rowMove, colMove, movesMade, font, 
+                            square, startingPlayer);          
+                        panelPlayingField.requestFocus();
+                        movesMade++;
+                    }
                 }
-            }
-
+        }
         // if a button was clicked on the gameboard, check for a winner
         if(squareClicked) 
         {
@@ -279,12 +283,12 @@ public class GUI extends JFrame implements ActionListener
             }
 
             // redisplay the gameboard to the screen
-            String input = JOptionPane.showInputDialog(null, "What size board do you want?", 
-                    "3");
-            size = Integer.parseInt(input);
-            
-            setLay();
-            //square = new JButton[size][size];
+            if(size == -1){
+                String input = JOptionPane.showInputDialog(null, "What size board do you want?", 
+                        "3");
+                size = Integer.parseInt(input);
+                setLay();
+            }
             
             panelSouth.setVisible(false); 
             panelSouth.setVisible(true);          
@@ -305,12 +309,13 @@ public class GUI extends JFrame implements ActionListener
         movesMade = 0;
         squareClicked = false;
 
-        for(int row = 0; row < square.length; row++)
+        for(int row = 0; row < square.length; row++){
             for(int col = 0; col < square[0].length; col++)
             {
                 square[row][col].setText("");
                 square[row][col].setEnabled(setTableEnabled);
             }
+        }
 
         win = false;        
     }
