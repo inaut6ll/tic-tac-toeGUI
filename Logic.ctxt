@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Logic
+comment1.params=rowMove\ colMove\ move\ font\ square\ startingPlayer
+comment1.target=void\ getMove(int,\ int,\ int,\ java.awt.Font,\ javax.swing.JButton[][],\ java.lang.String)
+comment2.params=square\ OX\ size
+comment2.target=boolean\ checkRows(javax.swing.JButton[][],\ java.lang.String,\ int)
+comment3.params=square\ OX\ size
+comment3.target=boolean\ checkCols(javax.swing.JButton[][],\ java.lang.String,\ int)
+comment4.params=square\ OX\ size
+comment4.target=boolean\ checkDiags(javax.swing.JButton[][],\ java.lang.String,\ int)
+comment5.params=square\ OX\ size
+comment5.target=boolean\ checkWin(javax.swing.JButton[][],\ java.lang.String,\ int)
+comment6.params=square\ size
+comment6.target=boolean\ checkFilled(javax.swing.JButton[][],\ int)
+comment7.params=pnlSouth\ pnlPlayingField
+comment7.target=void\ showGame(javax.swing.JPanel,\ javax.swing.JPanel)
+comment8.params=pnlSouth\ pnlTop\ pnlNewGame\ pnlPlayingField\ pnlBottom\ radioPanel
+comment8.target=void\ clearPanelSouth(javax.swing.JPanel,\ javax.swing.JPanel,\ javax.swing.JPanel,\ javax.swing.JPanel,\ javax.swing.JPanel,\ javax.swing.JPanel)
+numComments=9

@@ -8,15 +8,16 @@ import javax.swing.*;
 public class GUI extends JFrame implements ActionListener
 {
     // setting up ALL the variables
+    private int size = 5;
     JFrame window = new JFrame("Tic Tac Toe");
 
     JMenuBar menuMain = new JMenuBar();
-    JMenuItem menuNewGame = new JMenuItem("  New Game"), 
-    menuGameTitle = new JMenuItem("|Tic Tac Toe|  "),
-    menuStartingPlayer = new JMenuItem(" Starting Player"),
-    menuExit = new JMenuItem("    Quit");
+    JMenuItem menuNewGame = new JMenuItem("New Game"), 
+    menuGameTitle = new JMenuItem("Tic Tac Toe"),
+    menuStartingPlayer = new JMenuItem("Starting Player"),
+    menuExit = new JMenuItem("      Quit");
 
-    JButton [][] square = new JButton[3][3];
+    JButton [][] square = new JButton[size][size];
 
     JPanel panelNewGame = new JPanel(),
         panelNorth = new JPanel(),
@@ -30,7 +31,8 @@ public class GUI extends JFrame implements ActionListener
     private JRadioButton selectO = new JRadioButton("User Plays O", false);
     private ButtonGroup radioGroup;
     private String startingPlayer= "";
-    final int X = 800, Y = 480, color = 190; // size of the game window
+    private String player2 = "";
+    final int X = 900, Y = 480, color = 160; // size of the game window
     private boolean inGame = false;
     private boolean win = false;
     private boolean squareClicked = false;
@@ -55,34 +57,34 @@ public class GUI extends JFrame implements ActionListener
         panelNorth.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelSouth.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        panelNorth.setBackground(new Color(70, 70, 70));
-        panelSouth.setBackground(new Color(color, color, color));
+        panelNorth.setBackground(new Color(100, 0, 0));
+        panelSouth.setBackground(new Color(200, color, color));
 
-        panelTop.setBackground(new Color(color, color, color));
-        panelBottom.setBackground(new Color(color, color, color));
+        panelTop.setBackground(new Color(200, color, color));
+        panelBottom.setBackground(new Color(200, color, color));
 
         panelTop.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBottom.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        radioPanel.setBackground(new Color(color, color, color));
-        panelBottom.setBackground(new Color(color, color, color));
+        radioPanel.setBackground(new Color(200, color, color));
+        panelBottom.setBackground(new Color(200, color, color));
         radioPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Who Goes First?"));
 
         // adding menu items to menu bar
         menuMain.add(menuGameTitle);
         menuGameTitle.setEnabled(false);
-        menuGameTitle.setFont(new Font("Purisa",Font.BOLD,18));
+        menuGameTitle.setFont(new Font("Courier New",Font.BOLD,22));
         menuMain.add(menuNewGame);
-        menuNewGame.setFont(new Font("Purisa",Font.BOLD,18));
+        menuNewGame.setFont(new Font("Courier New",Font.BOLD,22));
         menuMain.add(menuStartingPlayer);
-        menuStartingPlayer.setFont(new Font("Purisa",Font.BOLD,18));
+        menuStartingPlayer.setFont(new Font("Courier New",Font.BOLD,22));
         menuMain.add(menuExit);
-        menuExit.setFont(new Font("Purisa",Font.BOLD,18));//---->Menu Bar Complete
+        menuExit.setFont(new Font("Courier New",Font.BOLD,22));//---->Menu Bar Complete
 
         // adding X & O options to menu
-        selectX.setFont(new Font("Purisa",Font.BOLD,18));
-        selectO.setFont(new Font("Purisa",Font.BOLD,18));
+        selectX.setFont(new Font("Courier New",Font.BOLD,22));
+        selectO.setFont(new Font("Courier New",Font.BOLD,22));
         radioGroup = new ButtonGroup(); // create ButtonGroup
         radioGroup.add(selectX); // add plain to group
         radioGroup.add(selectO);
@@ -94,19 +96,6 @@ public class GUI extends JFrame implements ActionListener
         menuExit.addActionListener(this);
         menuStartingPlayer.addActionListener(this);
 
-        // setting up the playing field
-        panelPlayingField.setLayout(new GridLayout(3, 3, 2, 2));
-        panelPlayingField.setBackground(Color.black);
-        for(int r = 0; r < square.length; r++)   
-            for(int c = 0; c < square[0].length; c++)
-            {
-                //creates button for each possible X/O location
-                square[r][c] = new JButton();
-                square[r][c].setBackground(new Color(220, 220, 220));
-                square[r][c].addActionListener(this);
-                panelPlayingField.add(square[r][c]);
-                square[r][c].setEnabled(setTableEnabled);
-            }
 
         // adding everything needed to panelNorth and panelSouth
         panelNorth.add(menuMain);
@@ -117,6 +106,22 @@ public class GUI extends JFrame implements ActionListener
         window.add(panelSouth, BorderLayout.CENTER);
         window.setVisible(true);
     }// End GUI
+    
+    // setting up the playing field
+    public void setLay(){
+        panelPlayingField.setLayout(new GridLayout(size, size, 2, 2));
+        panelPlayingField.setBackground(Color.black);
+        for(int r = 0; r < square.length; r++)   
+            for(int c = 0; c < square[0].length; c++)
+            {
+                //creates button for each possible X/O location
+                square[r][c] = new JButton();
+                square[r][c].setBackground(new Color(200, 160, 160));
+                square[r][c].addActionListener(this);
+                panelPlayingField.add(square[r][c]);
+                square[r][c].setEnabled(setTableEnabled);
+            }
+    }
 
     // ===========  Start Action Performed  ===============//
     public void actionPerformed(ActionEvent click)  
@@ -128,7 +133,9 @@ public class GUI extends JFrame implements ActionListener
         for(int rowMove=0; rowMove < square.length; rowMove++) 
             for(int colMove = 0; colMove < square[0].length; colMove++)
             {
-                if(source == square[rowMove][colMove] && movesMade < maxMoves)  
+                if(source == square[rowMove][colMove] && movesMade < maxMoves 
+                    && !square[rowMove][colMove].getText().equals("O")
+                    && !square[rowMove][colMove].getText().equals("X"))  
                 {
                     squareClicked = true;
                     Logic.getMove(rowMove, colMove, movesMade, font, 
@@ -141,8 +148,40 @@ public class GUI extends JFrame implements ActionListener
         // if a button was clicked on the gameboard, check for a winner
         if(squareClicked) 
         {
-            inGame = true;
-            squareClicked = false;
+            if(Logic.checkWin(square, startingPlayer, size)){
+                inGame = false;
+                int option = JOptionPane.showConfirmDialog(null, "Player 1 won. Yaaaaaaaaaaay. Do you want to play again?", 
+                    "Game Won" ,JOptionPane.YES_NO_OPTION);
+                if(option == JOptionPane.NO_OPTION)
+                {
+                    System.exit(0);
+                }else {
+                    redrawGameBoard();
+                }
+            }else if(Logic.checkWin(square, player2, size)){
+                inGame = false;
+                int option = JOptionPane.showConfirmDialog(null, "Player 2 won. Cool, very cool. Do you want to play again?", 
+                    "Game Won" ,JOptionPane.YES_NO_OPTION);
+                if(option == JOptionPane.NO_OPTION)
+                {
+                    System.exit(0);
+                }else {
+                    redrawGameBoard();
+                }
+            }else if(Logic.checkFilled(square, size)){
+                inGame = false;
+                int option = JOptionPane.showConfirmDialog(null, "It's a tie. I am not surprised. Do you want to play again?", 
+                    "Game Won" ,JOptionPane.YES_NO_OPTION);
+                if(option == JOptionPane.NO_OPTION)
+                {
+                    System.exit(0);
+                }else {
+                    redrawGameBoard();
+                }
+            }else {
+                inGame = true;
+                squareClicked = false;
+            }
         }
 
         // check if the user clicks on a menu item
@@ -231,13 +270,22 @@ public class GUI extends JFrame implements ActionListener
             if(theButton.getText().equals("User Plays X")) 
             {
                 startingPlayer = "X";
+                player2 = "O";
             }
             if(theButton.getText().equals("User Plays O"))
             {
                 startingPlayer = "O";
+                player2 = "X";
             }
 
             // redisplay the gameboard to the screen
+            String input = JOptionPane.showInputDialog(null, "What size board do you want?", 
+                    "3");
+            size = Integer.parseInt(input);
+            
+            setLay();
+            //square = new JButton[size][size];
+            
             panelSouth.setVisible(false); 
             panelSouth.setVisible(true);          
             redrawGameBoard();
@@ -255,6 +303,7 @@ public class GUI extends JFrame implements ActionListener
         Logic.showGame(panelSouth,panelPlayingField);       
 
         movesMade = 0;
+        squareClicked = false;
 
         for(int row = 0; row < square.length; row++)
             for(int col = 0; col < square[0].length; col++)
