@@ -32,7 +32,7 @@ public class GUI extends JFrame implements ActionListener
     private ButtonGroup radioGroup;
     private String startingPlayer= "";
     private String player2 = "";
-    final int X = 900, Y = 480, color = 160; // size of the game window
+    final int X = 1200, Y = 600, color = 160; // size of the game window
     private boolean inGame = false;
     private boolean win = false;
     private boolean squareClicked = false;
